@@ -8,10 +8,10 @@ public abstract class SQLDataHelper {
 
     // Cambia estos valores según tu entorno
     private static final String DB_URL =
-            "jdbc:sqlserver://localhost:1433;databaseName=PracticaDB;encrypt=true;trustServerCertificate=true";
+            "jdbc:sqlserver://localhost:1433;databaseName=master;encrypt=true;trustServerCertificate=true";
 
     private static final String USER = "sa";
-    private static final String PASSWORD = "tu_password";
+    private static final String PASSWORD = "P@ssw0rd";
 
     private static Connection conn = null;
 

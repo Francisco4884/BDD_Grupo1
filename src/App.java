@@ -3,6 +3,8 @@ import BusinessLogic.vCliente_BL;
 import DataAccess.DTO.vCliente_DTO;
 import Server.SimpleHTTPServer;
 
+import java.awt.Desktop;
+import java.net.URI;
 import java.time.LocalDate;
 import java.util.Scanner;
 import java.util.UUID;
@@ -10,12 +12,7 @@ import java.util.UUID;
 public class App {
     public static void main(String[] args) {
         if (args != null && args.length > 0 && "server".equalsIgnoreCase(args[0])) {
-            try {
-                SimpleHTTPServer.main(new String[0]);
-            } catch (Exception e) {
-                System.err.println("Error al iniciar el servidor: " + e.getMessage());
-                e.printStackTrace();
-            }
+            iniciarServidor();
             return;
         }
 
@@ -24,17 +21,17 @@ public class App {
             System.out.println("Sistema Bancario BAD - Consola");
             System.out.println("==============================================");
             System.out.println("1) Registrar cliente en SQL Server");
-            System.out.println("2) Iniciar servidor HTTP (igual que App.java server)");
-            System.out.print("Seleccione una opción (1/2): ");
+            System.out.println("2) Iniciar servidor HTTP (web local)");
+            System.out.println("3) Iniciar servidor HTTP y abrir navegador");
+            System.out.print("Seleccione una opción (1/2/3): ");
 
             String opcion = scanner.nextLine().trim();
             if ("2".equals(opcion)) {
-                try {
-                    SimpleHTTPServer.main(new String[0]);
-                } catch (Exception e) {
-                    System.err.println("Error al iniciar el servidor: " + e.getMessage());
-                    e.printStackTrace();
-                }
+                iniciarServidor();
+                return;
+            }
+            if ("3".equals(opcion)) {
+                iniciarServidorConNavegador();
                 return;
             }
 
@@ -74,6 +71,27 @@ public class App {
             }
         } catch (Exception e) {
             System.err.println("Error: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    private static void iniciarServidor() {
+        try {
+            SimpleHTTPServer.main(new String[0]);
+        } catch (Exception e) {
+            System.err.println("Error al iniciar el servidor: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    private static void iniciarServidorConNavegador() {
+        try {
+            SimpleHTTPServer.main(new String[0]);
+            if (Desktop.isDesktopSupported()) {
+                Desktop.getDesktop().browse(new URI("http://localhost:8080"));
+            }
+        } catch (Exception e) {
+            System.err.println("Error al iniciar el servidor: " + e.getMessage());
             e.printStackTrace();
         }
     }

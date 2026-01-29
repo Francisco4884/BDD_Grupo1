@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BAD - Registrar Cliente</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #F5F5F5;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            background: white;
+            border-bottom: 2px solid #E0E0E0;
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo-box {
+            width: 50px;
+            height: 50px;
+            background: #0066FF;
+            border-radius: 4px;
+        }
+
+        .logo-text {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .logo-subtitle {
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 10px;
+            margin-left: 50px;
+        }
+
+        .nav-item {
+            padding: 12px 30px;
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+
+        .nav-item:hover {
+            background: #F0F0F0;
+        }
+
+        .nav-item.active {
+            background: #000;
+            color: white;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .user-info {
+            text-align: right;
+        }
+
+        .user-name {
+            font-weight: 600;
+        }
+
+        .user-role {
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .btn-logout {
+            padding: 10px 24px;
+            background: #F5F5F5;
+            border: 1px solid #D0D0D0;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .btn-logout:hover {
+            background: #E0E0E0;
+        }
+
+        /* MAIN CONTENT */
+        .container {
+            padding: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .btn-back {
+            display: inline-block;
+            padding: 10px 20px;
+            background: white;
+            border: 1px solid #D0D0D0;
+            border-radius: 4px;
+            text-decoration: none;
+            color: #333;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+
+        .btn-back:hover {
+            background: #F5F5F5;
+        }
+
+        .page-title {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .page-subtitle {
+            font-size: 1.1em;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        /* FORM SECTIONS */
+        .form-card {
+            background: white;
+            border-radius: 8px;
+            padding: 40px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            font-size: 1.8em;
+            font-weight: bold;
+            margin-bottom: 25px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-size: 1.05em;
+            font-weight: 500;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 14px;
+            border: none;
+            background: #E0E0E0;
+            border-radius: 4px;
+            font-size: 1em;
+        }
+
+        .form-group input::placeholder {
+            color: #999;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 40px;
+        }
+
+        .btn-primary {
+            padding: 15px 50px;
+            background: #0066FF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary:hover {
+            background: #0052CC;
+        }
+
+        .btn-secondary {
+            padding: 15px 50px;
+            background: white;
+            color: #333;
+            border: 2px solid #D0D0D0;
+            border-radius: 4px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-secondary:hover {
+            background: #F5F5F5;
+        }
+
+        .scroll-indicator {
+            text-align: center;
+            font-size: 2em;
+            color: #999;
+            margin: 20px 0;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <div class="logo-box"></div>
+            <div>
+                <div class="logo-text">BAD</div>
+                <div class="logo-subtitle" id="sucursalName">Quito - Centro</div>
+            </div>
+            <div class="nav-menu">
+                <a href="dashboard.html" class="nav-item">Dashboard</a>
+                <a href="clientes.html" class="nav-item active">Clientes</a>
+                <a href="reportes.html" class="nav-item">Reportes</a>
+            </div>
+        </div>
+        <div class="nav-right">
+            <div class="user-info">
+                <div class="user-name">Usuario: Admin</div>
+                <div class="user-role">Operador Bancario</div>
+            </div>
+            <button class="btn-logout" onclick="logout()">Cerrar Sesión</button>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <div class="container">
+        <a href="clientes.html" class="btn-back">← Volver</a>
+        
+        <h1 class="page-title">Registrar Nuevo Cliente</h1>
+        <p class="page-subtitle">Complete el formulario con los datos del cliente</p>
+
+        <form id="registroForm">
+            <!-- DATOS DE IDENTIFICACIÓN -->
+            <div class="form-card">
+                <h2 class="section-title">Datos de Identificación</h2>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Cédula/ Pasaporte *</label>
+                        <input type="text" id="cedula" placeholder="xxxxxxxxxxxx" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Fecha Nacimiento *</label>
+                        <input type="date" id="fechaNacimiento" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Nombres *</label>
+                        <input type="text" id="nombres" placeholder="Santiago" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Apellidos *</label>
+                        <input type="text" id="apellidos" placeholder="De La Cruz" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="scroll-indicator">↓</div>
+
+            <!-- DATOS DE CONTACTO -->
+            <div class="form-card">
+                <h2 class="section-title">Datos de Contacto</h2>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Teléfono *</label>
+                        <input type="tel" id="telefono" placeholder="xxxxxxxxxxxx" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Correo Electrónico *</label>
+                        <input type="email" id="email" placeholder="correo@ejemplo.com" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group" style="grid-column: 1 / -1;">
+                        <label>Dirección *</label>
+                        <input type="text" id="direccion" placeholder="Calle principal y secundaria, número de casa" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="scroll-indicator">↓</div>
+
+            <!-- DATOS BANCARIOS -->
+            <div class="form-card">
+                <h2 class="section-title">Datos Bancarios</h2>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Sucursal de Registro *</label>
+                        <select id="sucursal" required>
+                            <option value="">Seleccione una sucursal</option>
+                            <option value="1">Quito - Centro</option>
+                            <option value="2">Cuenca</option>
+                            <option value="3">Guayaquil</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Estado Inicial</label>
+                        <select id="estado">
+                            <option value="A">Activo</option>
+                            <option value="I">Inactivo</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BOTONES -->
+            <div class="form-actions">
+                <button type="button" class="btn-secondary" onclick="cancelar()">Cancelar</button>
+                <button type="submit" class="btn-primary">Registrar Cliente</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sucursalNombre = sessionStorage.getItem('sucursalNombre') || 'Quito - Centro';
+            const sucursalId = sessionStorage.getItem('sucursal') || '1';
+            
+            document.getElementById('sucursalName').textContent = sucursalNombre;
+            document.getElementById('sucursal').value = sucursalId;
+        });
+
+        function logout() {
+            sessionStorage.clear();
+            window.location.href = 'login.html';
+        }
+
+        function cancelar() {
+            if (confirm('¿Está seguro que desea cancelar? Se perderán los datos ingresados.')) {
+                window.location.href = 'clientes.html';
+            }
+        }
+
+        document.getElementById('registroForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Recopilar datos del formulario
+            const nombreCompleto = `${document.getElementById('nombres').value} ${document.getElementById('apellidos').value}`;
+            const clienteData = {
+                idSucursalOrigen: document.getElementById('sucursal').value,
+                cedula: document.getElementById('cedula').value,
+                nombreCompleto: nombreCompleto,
+                direccion: document.getElementById('direccion').value,
+                telefono: document.getElementById('telefono').value,
+                email: document.getElementById('email').value,
+                estado: document.getElementById('estado').value
+            };
+
+            try {
+                // Llamar a la API para registrar cliente
+                const response = await fetch('http://localhost:8080/api/clientes', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(clienteData)
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alert('Cliente registrado exitosamente');
+                    
+                    // Preguntar si desea abrir una cuenta
+                    if (confirm('¿Desea abrir una cuenta bancaria para este cliente?')) {
+                        // Guardar datos del cliente para la siguiente página
+                        sessionStorage.setItem('ultimoCliente', JSON.stringify(data.cliente));
+                        window.location.href = 'abrir-cuenta.html';
+                    } else {
+                        window.location.href = 'clientes.html';
+                    }
+                } else {
+                    alert('Error al registrar cliente: ' + data.message);
+                }
+
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error al conectar con el servidor. Asegúrese de que el servidor esté ejecutándose en http://localhost:8080');
+            }
+        });
+
+        // Validación de cédula ecuatoriana (10 dígitos)
+        document.getElementById('cedula').addEventListener('blur', function() {
+            const cedula = this.value;
+            if (cedula.length === 10) {
+                // Aquí podrías agregar validación de cédula ecuatoriana
+                console.log('Validando cédula:', cedula);
+            }
+        });
+    </script>
+</body>
+</html>

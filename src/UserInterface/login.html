@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BAD - Login</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            height: 100vh;
+            display: flex;
+        }
+
+        .left-panel {
+            flex: 1;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+        }
+
+        .right-panel {
+            flex: 1;
+            background: #0066FF;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .logo-text {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.1em;
+            margin-bottom: 40px;
+            color: #666;
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+        }
+
+        .form-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.95em;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            background: #E0E0E0;
+            border-radius: 4px;
+            font-size: 1em;
+        }
+
+        .form-group input::placeholder {
+            color: #999;
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 14px;
+            background: #0066FF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1em;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-login:hover {
+            background: #0052CC;
+        }
+
+        .bank-logo {
+            width: 200px;
+            height: 200px;
+            margin-bottom: 30px;
+        }
+
+        .bank-name {
+            font-size: 2em;
+            font-weight: bold;
+            text-align: center;
+            line-height: 1.3;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+            
+            .right-panel {
+                order: -1;
+                padding: 40px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="left-panel">
+        <div class="login-container">
+            <div class="logo-text">BANCO ANDINO DE DESARROLLO</div>
+            <div class="subtitle">Sistema de Gestión Bancaria</div>
+
+            <div class="form-section">
+                <div class="form-title">Iniciar Sesión</div>
+                
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label>Sucursal</label>
+                        <select id="sucursal" required>
+                            <option value="">Seleccionar sucursal</option>
+                            <option value="1">Quito - Centro</option>
+                            <option value="2">Cuenca</option>
+                            <option value="3">Guayaquil</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Usuario</label>
+                        <input type="text" id="username" placeholder="Ingrese su usuario" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Contraseña</label>
+                        <input type="password" id="password" placeholder="Ingrese su contraseña" required>
+                    </div>
+
+                    <button type="submit" class="btn-login">Ingresar al Sistema</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="right-panel">
+        <svg class="bank-logo" viewBox="0 0 200 200" fill="none">
+            <path d="M100 40 L140 70 L140 160 L100 180 L60 160 L60 70 Z" fill="#A8D5FF" opacity="0.8"/>
+            <circle cx="100" cy="80" r="15" fill="white"/>
+            <path d="M100 95 Q85 110 85 130 L85 150" stroke="white" stroke-width="8" fill="none"/>
+            <path d="M100 95 Q115 110 115 130 L115 150" stroke="white" stroke-width="8" fill="none"/>
+        </svg>
+        <div class="bank-name">BANCO ANDINO<br>DE DESARROLLO</div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const sucursal = document.getElementById('sucursal').value;
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            if (!username || !password || !sucursal) {
+                alert('Por favor complete todos los campos');
+                return;
+            }
+
+            try {
+                // Llamar a la API de login
+                const response = await fetch('http://localhost:8080/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        username: username,
+                        password: password,
+                        sucursal: sucursal
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    // Guardar datos de sesión
+                    sessionStorage.setItem('usuario', username);
+                    sessionStorage.setItem('nombreCompleto', data.usuario.nombreCompleto);
+                    sessionStorage.setItem('correo', data.usuario.correo);
+                    sessionStorage.setItem('sucursal', sucursal);
+                    sessionStorage.setItem('sucursalNombre', document.querySelector('#sucursal option:checked').text);
+                    
+                    alert('Bienvenido ' + data.usuario.nombreCompleto);
+                    window.location.href = 'dashboard.html';
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error al conectar con el servidor. Asegúrese de que el servidor esté ejecutándose en http://localhost:8080');
+            }
+        });
+    </script>
+</body>
+</html>

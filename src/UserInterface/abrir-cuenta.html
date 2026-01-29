@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BAD - Abrir Nueva Cuenta</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #F5F5F5;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            background: white;
+            border-bottom: 2px solid #E0E0E0;
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo-box {
+            width: 50px;
+            height: 50px;
+            background: #0066FF;
+            border-radius: 4px;
+        }
+
+        .logo-text {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .logo-subtitle {
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 10px;
+            margin-left: 50px;
+        }
+
+        .nav-item {
+            padding: 12px 30px;
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+
+        .nav-item:hover {
+            background: #F0F0F0;
+        }
+
+        .nav-item.active {
+            background: #000;
+            color: white;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .user-info {
+            text-align: right;
+        }
+
+        .user-name {
+            font-weight: 600;
+        }
+
+        .user-role {
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .btn-logout {
+            padding: 10px 24px;
+            background: #F5F5F5;
+            border: 1px solid #D0D0D0;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .btn-logout:hover {
+            background: #E0E0E0;
+        }
+
+        /* MAIN CONTENT */
+        .container {
+            padding: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .btn-back {
+            display: inline-block;
+            padding: 10px 20px;
+            background: white;
+            border: 1px solid #D0D0D0;
+            border-radius: 4px;
+            text-decoration: none;
+            color: #333;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+
+        .btn-back:hover {
+            background: #F5F5F5;
+        }
+
+        .page-title {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .page-subtitle {
+            font-size: 1.1em;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        /* CLIENT BANNER */
+        .client-banner {
+            background: linear-gradient(135deg, #A8D5FF 0%, #6BA3D4 100%);
+            border-radius: 8px;
+            padding: 25px 35px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .client-avatar {
+            width: 80px;
+            height: 80px;
+            background: #0066FF;
+            border-radius: 8px;
+            flex-shrink: 0;
+        }
+
+        .client-info {
+            flex: 1;
+        }
+
+        .client-name {
+            font-size: 1.8em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .client-details {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        /* FORM SECTIONS */
+        .form-card {
+            background: white;
+            border-radius: 8px;
+            padding: 40px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            font-size: 1.8em;
+            font-weight: bold;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 1.1em;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .form-group select,
+        .form-group input {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            background: #E0E0E0;
+            border-radius: 4px;
+            font-size: 1.05em;
+        }
+
+        .form-group select {
+            cursor: pointer;
+        }
+
+        .scroll-indicator {
+            text-align: center;
+            font-size: 2em;
+            color: #999;
+            margin: 20px 0;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 40px;
+        }
+
+        .btn-primary {
+            padding: 15px 50px;
+            background: #0066FF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary:hover {
+            background: #0052CC;
+        }
+
+        .btn-secondary {
+            padding: 15px 50px;
+            background: white;
+            color: #333;
+            border: 2px solid #D0D0D0;
+            border-radius: 4px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-secondary:hover {
+            background: #F5F5F5;
+        }
+
+        .search-section {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .search-group {
+            display: flex;
+            gap: 15px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            background: #F0F0F0;
+            border-radius: 4px;
+            font-size: 1.05em;
+        }
+
+        .btn-search {
+            padding: 14px 30px;
+            background: #0066FF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-search:hover {
+            background: #0052CC;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <div class="logo-box"></div>
+            <div>
+                <div class="logo-text">BAD</div>
+                <div class="logo-subtitle" id="sucursalName">Quito - Centro</div>
+            </div>
+            <div class="nav-menu">
+                <a href="dashboard.html" class="nav-item">Dashboard</a>
+                <a href="clientes.html" class="nav-item active">Clientes</a>
+                <a href="reportes.html" class="nav-item">Reportes</a>
+            </div>
+        </div>
+        <div class="nav-right">
+            <div class="user-info">
+                <div class="user-name">Usuario: Admin</div>
+                <div class="user-role">Operador Bancario</div>
+            </div>
+            <button class="btn-logout" onclick="logout()">Cerrar Sesión</button>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <div class="container">
+        <a href="clientes.html" class="btn-back">← Volver</a>
+        
+        <h1 class="page-title">Abrir Nueva Cuenta</h1>
+        <p class="page-subtitle">Complete los datos para abrir una cuenta bancaria</p>
+
+        <!-- SEARCH CLIENT -->
+        <div class="search-section" id="searchSection">
+            <h3 style="margin-bottom: 15px; font-size: 1.2em;">Buscar Cliente</h3>
+            <div class="search-group">
+                <input type="text" class="search-input" id="searchCliente" placeholder="Ingrese cédula o nombre del cliente">
+                <button class="btn-search" onclick="buscarCliente()">Buscar Cliente</button>
+            </div>
+        </div>
+
+        <!-- CLIENTE SELECCIONADO -->
+        <div class="client-banner" id="clientBanner" style="display: none;">
+            <div class="client-avatar"></div>
+            <div class="client-info">
+                <div class="client-name" id="clientName">María Gabriela Gonzales Pérez</div>
+                <div class="client-details">
+                    <span id="clientId">ID: CLI001</span> • 
+                    <span id="clientCedula">Cédula: 1234567890</span>
+                </div>
+            </div>
+        </div>
+
+        <form id="abrirCuentaForm" style="display: none;">
+            <!-- TIPO DE CUENTA -->
+            <div class="form-card">
+                <h2 class="section-title">Tipo de Cuenta</h2>
+                
+                <div class="form-group">
+                    <label>Seleccione el Tipo de Cuenta *</label>
+                    <select id="tipoCuenta" required>
+                        <option value="">Seleccione un tipo de cuenta</option>
+                        <option value="1">Cuenta de Ahorros</option>
+                        <option value="2">Cuenta Corriente</option>
+                        <option value="3">Cuenta de Inversión</option>
+                        <option value="4">Cuenta Empresarial</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="scroll-indicator">↓</div>
+
+            <!-- DEPÓSITO INICIAL -->
+            <div class="form-card">
+                <h2 class="section-title">Depósito Inicial</h2>
+                
+                <div class="form-group">
+                    <label>Monto del Depósito Inicial *</label>
+                    <input type="number" id="depositoInicial" placeholder="$ 0.00" step="0.01" min="0" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Método de Depósito</label>
+                    <select id="metodoDeposito" required>
+                        <option value="efectivo">Efectivo</option>
+                        <option value="cheque">Cheque</option>
+                        <option value="transferencia">Transferencia</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="scroll-indicator">↓</div>
+
+            <!-- DATOS ADICIONALES -->
+            <div class="form-card">
+                <h2 class="section-title">Datos Adicionales</h2>
+                
+                <div class="form-group">
+                    <label>Sucursal de Apertura *</label>
+                    <select id="sucursal" required>
+                        <option value="">Seleccione una sucursal</option>
+                        <option value="1">Quito - Centro</option>
+                        <option value="2">Cuenca</option>
+                        <option value="3">Guayaquil</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Observaciones</label>
+                    <input type="text" id="observaciones" placeholder="Notas adicionales (opcional)">
+                </div>
+            </div>
+
+            <!-- BOTONES -->
+            <div class="form-actions">
+                <button type="button" class="btn-secondary" onclick="cancelar()">Cancelar</button>
+                <button type="submit" class="btn-primary">Abrir Cuenta</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        let clienteSeleccionado = null;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const sucursalNombre = sessionStorage.getItem('sucursalNombre') || 'Quito - Centro';
+            const sucursalId = sessionStorage.getItem('sucursal') || '1';
+            
+            document.getElementById('sucursalName').textContent = sucursalNombre;
+            document.getElementById('sucursal').value = sucursalId;
+        });
+
+        function logout() {
+            sessionStorage.clear();
+            window.location.href = 'login.html';
+        }
+
+        function cancelar() {
+            if (confirm('¿Está seguro que desea cancelar? Se perderán los datos ingresados.')) {
+                window.location.href = 'clientes.html';
+            }
+        }
+
+        async function buscarCliente() {
+            const searchTerm = document.getElementById('searchCliente').value.trim();
+            
+            if (!searchTerm) {
+                alert('Por favor ingrese una cédula para buscar');
+                return;
+            }
+
+            try {
+                // Llamar a la API para buscar cliente por cédula
+                const response = await fetch(`http://localhost:8080/api/clientes?cedula=${searchTerm}`);
+                
+                if (response.ok) {
+                    const cliente = await response.json();
+                    
+                    if (cliente && cliente.cedula) {
+                        clienteSeleccionado = cliente;
+                        mostrarCliente(cliente);
+                    } else {
+                        alert('Cliente no encontrado. Verifique la cédula.');
+                    }
+                } else {
+                    alert('Cliente no encontrado. Verifique la cédula.');
+                }
+
+            } catch (error) {
+                console.error('Error buscando cliente:', error);
+                alert('Error al conectar con el servidor. Asegúrese de que el servidor esté ejecutándose en http://localhost:8080');
+            }
+        }
+
+        function mostrarCliente(cliente) {
+            // Mostrar banner del cliente
+            document.getElementById('clientName').textContent = cliente.nombreCompleto;
+            document.getElementById('clientId').textContent = `ID: ${cliente.idCliente}`;
+            document.getElementById('clientCedula').textContent = `Cédula: ${cliente.cedula}`;
+            
+            document.getElementById('clientBanner').style.display = 'flex';
+            document.getElementById('abrirCuentaForm').style.display = 'block';
+            
+            // Ocultar sección de búsqueda
+            document.getElementById('searchSection').style.display = 'none';
+        }
+
+        document.getElementById('abrirCuentaForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            if (!clienteSeleccionado) {
+                alert('Debe seleccionar un cliente primero');
+                return;
+            }
+
+            // Generar número de cuenta único (10 dígitos)
+            const numeroCuenta = Math.floor(1000000000 + Math.random() * 9000000000).toString();
+            
+            const cuentaData = {
+                idSucursal: document.getElementById('sucursal').value,
+                numeroCuenta: numeroCuenta,
+                saldoInicial: document.getElementById('depositoInicial').value,
+                estado: 'Activo',
+                idCliente: clienteSeleccionado.idCliente,
+                idTipoCuenta: parseInt(document.getElementById('tipoCuenta').value)
+            };
+
+            try {
+                // Llamar a la API para crear cuenta
+                const response = await fetch('http://localhost:8080/api/cuentas', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(cuentaData)
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alert(`Cuenta abierta exitosamente\nNúmero de cuenta: ${numeroCuenta}\nDepósito inicial: $${cuentaData.saldoInicial}`);
+                    window.location.href = `detalle-cliente.html?id=${clienteSeleccionado.idCliente}`;
+                } else {
+                    alert('Error al abrir la cuenta: ' + data.message);
+                }
+
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error al conectar con el servidor. Asegúrese de que el servidor esté ejecutándose en http://localhost:8080');
+            }
+        });
+
+        // Validar depósito inicial según tipo de cuenta
+        document.getElementById('tipoCuenta').addEventListener('change', function() {
+            const tipo = this.value;
+            const depositoInput = document.getElementById('depositoInicial');
+            
+            // Establecer mínimos según tipo de cuenta
+            if (tipo === '1') { // Ahorros
+                depositoInput.min = '100';
+                depositoInput.placeholder = '$ 100.00 mínimo';
+            } else if (tipo === '2') { // Corriente
+                depositoInput.min = '500';
+                depositoInput.placeholder = '$ 500.00 mínimo';
+            } else if (tipo === '3' || tipo === '4') { // Inversión o Empresarial
+                depositoInput.min = '1000';
+                depositoInput.placeholder = '$ 1,000.00 mínimo';
+            }
+        });
+    </script>
+</body>
+</html>

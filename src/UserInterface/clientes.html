@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BAD - Gestión de Clientes</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #F5F5F5;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            background: white;
+            border-bottom: 2px solid #E0E0E0;
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo-box {
+            width: 50px;
+            height: 50px;
+            background: #0066FF;
+            border-radius: 4px;
+        }
+
+        .logo-text {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .logo-subtitle {
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 10px;
+            margin-left: 50px;
+        }
+
+        .nav-item {
+            padding: 12px 30px;
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+
+        .nav-item:hover {
+            background: #F0F0F0;
+        }
+
+        .nav-item.active {
+            background: #000;
+            color: white;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .user-info {
+            text-align: right;
+        }
+
+        .user-name {
+            font-weight: 600;
+        }
+
+        .user-role {
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .btn-logout {
+            padding: 10px 24px;
+            background: #F5F5F5;
+            border: 1px solid #D0D0D0;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .btn-logout:hover {
+            background: #E0E0E0;
+        }
+
+        /* MAIN CONTENT */
+        .container {
+            padding: 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 30px;
+        }
+
+        .page-title {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .page-subtitle {
+            font-size: 1.1em;
+            color: #666;
+        }
+
+        .btn-add {
+            padding: 15px 30px;
+            background: #22C55E;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-add:hover {
+            background: #16A34A;
+        }
+
+        /* STATS CARDS */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            padding: 40px 30px;
+            border-radius: 8px;
+            color: white;
+            min-height: 150px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .stat-card.green { background: #4CAF50; }
+        .stat-card.blue { background: #4A7BA7; }
+        .stat-card.purple { background: #7E57A2; }
+        .stat-card.black { background: #000; }
+
+        .stat-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .stat-value {
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+
+        /* SEARCH AND FILTERS */
+        .search-section {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .search-row {
+            display: grid;
+            grid-template-columns: 1fr auto auto;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .search-input {
+            padding: 12px 20px;
+            border: none;
+            background: #F0F0F0;
+            border-radius: 4px;
+            font-size: 1em;
+        }
+
+        .filter-btn {
+            padding: 12px 24px;
+            background: #E0E0E0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .filter-btn:hover {
+            background: #D0D0D0;
+        }
+
+        /* CLIENTS TABLE */
+        .section-card {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            font-size: 1.8em;
+            font-weight: bold;
+            margin-bottom: 25px;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+            padding: 15px;
+            font-weight: 600;
+            border-bottom: 2px solid #E0E0E0;
+            font-size: 1.05em;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #F0F0F0;
+        }
+
+        tr:hover {
+            background: #F9F9F9;
+        }
+
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+
+        .status-active {
+            background: #D1FAE5;
+            color: #065F46;
+        }
+
+        .status-inactive {
+            background: #FEE2E2;
+            color: #991B1B;
+        }
+
+        .btn-action {
+            padding: 8px 16px;
+            background: #0066FF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s;
+        }
+
+        .btn-action:hover {
+            background: #0052CC;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <div class="logo-box"></div>
+            <div>
+                <div class="logo-text">BAD</div>
+                <div class="logo-subtitle" id="sucursalName">Quito - Centro</div>
+            </div>
+            <div class="nav-menu">
+                <a href="dashboard.html" class="nav-item">Dashboard</a>
+                <a href="clientes.html" class="nav-item active">Clientes</a>
+                <a href="reportes.html" class="nav-item">Reportes</a>
+            </div>
+        </div>
+        <div class="nav-right">
+            <div class="user-info">
+                <div class="user-name">Usuario: Admin</div>
+                <div class="user-role">Operador Bancario</div>
+            </div>
+            <button class="btn-logout" onclick="logout()">Cerrar Sesión</button>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <div class="container">
+        <div class="page-header">
+            <div>
+                <h1 class="page-title">Gestión de Clientes</h1>
+                <p class="page-subtitle" id="clientesSubtitle">Lista completa de clinetes registrados en Quito - Centro</p>
+            </div>
+            <button class="btn-add" onclick="window.location.href='registro-cliente.html'">+ Registrar Nuevo Cliente</button>
+        </div>
+
+        <!-- STATS CARDS -->
+        <div class="stats-grid">
+            <div class="stat-card green">
+                <div class="stat-title">Total Clientes</div>
+                <div class="stat-value" id="totalClientes">---</div>
+            </div>
+            <div class="stat-card blue">
+                <div class="stat-title">Clientes Activos</div>
+                <div class="stat-value" id="clientesActivos">---</div>
+            </div>
+            <div class="stat-card purple">
+                <div class="stat-title">Clientes Inactivos</div>
+                <div class="stat-value" id="clientesInactivos">---</div>
+            </div>
+            <div class="stat-card black">
+                <div class="stat-title">Otros</div>
+                <div class="stat-value" id="otros">---</div>
+            </div>
+        </div>
+
+        <!-- SEARCH AND FILTERS -->
+        <div class="search-section">
+            <div class="search-row">
+                <input type="text" class="search-input" id="searchInput" placeholder="Buscar por cédula, nombre o ID de cliente">
+                <select class="filter-btn" id="filterEstado">
+                    <option value="">Todos los estados</option>
+                    <option value="A">Activos</option>
+                    <option value="I">Inactivos</option>
+                </select>
+                <select class="filter-btn" id="filterSucursal">
+                    <option value="">Todas las Sucursales</option>
+                    <option value="1">Quito</option>
+                    <option value="2">Cuenca</option>
+                    <option value="3">Guayaquil</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- CLIENTS TABLE -->
+        <div class="section-card">
+            <h2 class="section-title">Clientes</h2>
+            <div class="table-container">
+                <table id="clientsTable">
+                    <thead>
+                        <tr>
+                            <th>ID Cliente</th>
+                            <th>Cédula</th>
+                            <th>Nombre Completo</th>
+                            <th>Contacto Sucursal</th>
+                            <th>Saldo Total</th>
+                            <th>Estado</th>
+                            <th>Accion</th>
+                        </tr>
+                    </thead>
+                    <tbody id="clientsBody">
+                        <tr>
+                            <td colspan="7" class="loading">Cargando clientes...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Cargar información de sesión
+        document.addEventListener('DOMContentLoaded', function() {
+            const sucursalNombre = sessionStorage.getItem('sucursalNombre') || 'Quito - Centro';
+            document.getElementById('sucursalName').textContent = sucursalNombre;
+            document.getElementById('clientesSubtitle').textContent = `Lista completa de clientes registrados en ${sucursalNombre}`;
+            
+            cargarClientes();
+            
+            // Event listeners para búsqueda y filtros
+            document.getElementById('searchInput').addEventListener('input', filtrarClientes);
+            document.getElementById('filterEstado').addEventListener('change', filtrarClientes);
+            document.getElementById('filterSucursal').addEventListener('change', filtrarClientes);
+        });
+
+        function logout() {
+            sessionStorage.clear();
+            window.location.href = 'login.html';
+        }
+
+        let todosLosClientes = [];
+
+        // FUNCIÓN PARA CARGAR CLIENTES
+        async function cargarClientes() {
+            try {
+                // Llamar a la API de clientes
+                const response = await fetch('http://localhost:8080/api/clientes');
+                const clientes = await response.json();
+                
+                todosLosClientes = clientes;
+
+                // Calcular estadísticas
+                const totalClientes = clientes.length;
+                const clientesActivos = clientes.filter(c => c.estado === 'A' || c.estado === 'Activo').length;
+                const clientesInactivos = clientes.filter(c => c.estado === 'I' || c.estado === 'Inactivo').length;
+
+                // Actualizar stats
+                document.getElementById('totalClientes').textContent = totalClientes.toLocaleString();
+                document.getElementById('clientesActivos').textContent = clientesActivos.toLocaleString();
+                document.getElementById('clientesInactivos').textContent = clientesInactivos.toLocaleString();
+                document.getElementById('otros').textContent = '0';
+
+                // Mostrar clientes
+                mostrarClientes(todosLosClientes);
+
+            } catch (error) {
+                console.error('Error cargando clientes:', error);
+                document.getElementById('clientsBody').innerHTML = 
+                    '<tr><td colspan="7" class="loading">Error cargando datos. Asegúrese de que el servidor esté ejecutándose en http://localhost:8080</td></tr>';
+            }
+        }
+
+        function mostrarClientes(clientes) {
+            const tbody = document.getElementById('clientsBody');
+            tbody.innerHTML = '';
+            
+            if (clientes.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" class="loading">No se encontraron clientes</td></tr>';
+                return;
+            }
+
+            clientes.forEach(cliente => {
+                const estadoBadge = (cliente.estado === 'A' || cliente.estado === 'Activo')
+                    ? '<span class="status-badge status-active">Activo</span>'
+                    : '<span class="status-badge status-inactive">Inactivo</span>';
+                    
+                const row = `
+                    <tr>
+                        <td>${cliente.idCliente}</td>
+                        <td>${cliente.cedula}</td>
+                        <td><strong>${cliente.nombreCompleto}</strong></td>
+                        <td>${cliente.idSucursalOrigen || 'N/A'}</td>
+                        <td><strong>$0.00</strong></td>
+                        <td>${estadoBadge}</td>
+                        <td><button class="btn-action" onclick="verDetalle('${cliente.idCliente}')">Ver Detalle</button></td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+        }
+
+        function filtrarClientes() {
+            const searchText = document.getElementById('searchInput').value.toLowerCase();
+            const filterEstado = document.getElementById('filterEstado').value;
+            const filterSucursal = document.getElementById('filterSucursal').value;
+
+            const clientesFiltrados = todosLosClientes.filter(cliente => {
+                const matchSearch = searchText === '' || 
+                    cliente.cedula.includes(searchText) ||
+                    cliente.nombreCompleto.toLowerCase().includes(searchText) ||
+                    cliente.idCliente.toLowerCase().includes(searchText);
+                    
+                const matchEstado = filterEstado === '' || cliente.estado === filterEstado;
+                
+                const matchSucursal = filterSucursal === '' || 
+                    cliente.sucursal.includes(filterSucursal === '1' ? 'Quito' : filterSucursal === '2' ? 'Cuenca' : 'Guayaquil');
+
+                return matchSearch && matchEstado && matchSucursal;
+            });
+
+            mostrarClientes(clientesFiltrados);
+        }
+
+        function verDetalle(idCliente) {
+            window.location.href = `detalle-cliente.html?id=${idCliente}`;
+        }
+    </script>
+</body>
+</html>
